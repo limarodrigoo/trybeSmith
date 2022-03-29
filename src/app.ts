@@ -1,9 +1,10 @@
 import express from 'express';
-import productRouter from './router/ProductRouter';
+import { ProductRouter, UserRouter } from './router';
 
 const app = express();
 
 app.use(express.json());
-app.use('/products', productRouter);
+app.use('/products', ProductRouter);
+app.use('/users', UserRouter);
 
 export default app;
