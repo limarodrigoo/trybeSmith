@@ -7,7 +7,24 @@ export default class ProductModel {
   }
 
   public async getAll(): Promise<Products[]> {
-    const result = this.prisma.products.findMany();
+    const result = await this.prisma.products.findMany();
+    return result;
+  }
+
+  public async create(name:string, amount: string): Promise<Products> {
+    const result = await this.prisma.products.create({
+      data: {
+        name,
+        amount,
+      },
+      select: {
+        id: true,
+        name: true,
+        amount: true,
+        orderId: false,
+      },
+    });
+
     return result;
   }
 }
