@@ -1,7 +1,7 @@
 import { Pool, ResultSetHeader } from 'mysql2/promise';
 import Users from '../interfaces/Users';
 
-export default class ProductModel {
+export default class UserModel {
   public connection: Pool;
 
   constructor(connection: Pool) {
