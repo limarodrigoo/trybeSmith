@@ -1,7 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import { productSchema, userSchema } from '../schemas';
+import { loginSchema, productSchema, userSchema } from '../schemas';
 
 export default class Validation {
+  public error;
+  
+  constructor() {
+    this.error = 'Algo deu errado';
+  }
+
   public productValidate = (
     req: Request,
     res: Response,
@@ -18,7 +24,7 @@ export default class Validation {
       next();
     } catch (e) {
       console.log(e);
-      return res.status(500).json({ message: 'Algo deu errado' });
+      return res.status(500).json({ message: this.error });
     }
   };
 
@@ -36,7 +42,24 @@ export default class Validation {
       next();
     } catch (e) {
       console.log(e);
-      return res.status(500).json({ message: 'Algo deu errado' });
+      return res.status(500).json({ message: this.error });
+    }
+  };
+  
+  public loginValidate = (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { username, password } = req.body;
+      const { error } = loginSchema.validate(
+        { username, password },
+      );
+      if (error) {
+        const [code, message] = error.details[0].message.split('|');
+        return res.status(Number(code)).json({ error: message });
+      }
+      next();
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ message: this.error });
     }
   };
 }
