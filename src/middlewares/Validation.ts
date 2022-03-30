@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { loginSchema, productSchema, userSchema } from '../schemas';
+import { loginSchema, productSchema, userSchema, arrayOfProductsSchema } from '../schemas';
 
 export default class Validation {
   public error;
@@ -19,6 +19,24 @@ export default class Validation {
       if (error) {
         const [code, message] = error.details[0].message.split('|');
 
+        return res.status(Number(code)).json({ error: message });
+      }
+      next();
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ message: this.error });
+    }
+  };
+
+  public arrayOfProductsValidate = (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { products } = req.body;
+      const { error } = arrayOfProductsSchema.validate(
+        { products },
+        { convert: false },
+      );
+      if (error) {
+        const [code, message] = error.details[0].message.split('|');
         return res.status(Number(code)).json({ error: message });
       }
       next();
