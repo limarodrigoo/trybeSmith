@@ -25,10 +25,30 @@ export default class ProductModel {
     return product;
   }
 
+  public async getById(id: number): Promise<Products> {
+    const [result] = await this.connection.execute(
+      'SELECT * FROM Trybesmith.Products WHERE id=?',
+      [id],
+    );
+    const [product] = result as Products[];
+    return product;
+  }
+
   public async create(name: string, amount: string): Promise<Products> {
     const [result] = await this.connection.execute<ResultSetHeader>(
       'INSERT INTO Trybesmith.Products (name, amount) VALUES (?,?)',
       [name, amount],
+    );
+    const { insertId } = result;
+
+    const newProduct = { id: insertId, name, amount };
+    return newProduct;
+  }
+
+  public async createByOrder(name: string, amount: string, orderId: number): Promise<Products> {
+    const [result] = await this.connection.execute<ResultSetHeader>(
+      'INSERT INTO Trybesmith.Products (name, amount, orderId) VALUES (?,?,?)',
+      [name, amount, orderId],
     );
     const { insertId } = result;
 

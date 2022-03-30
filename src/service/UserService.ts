@@ -19,4 +19,9 @@ export default class ProductService {
     const result = await this.model.create(username, classe, level, password);
     return result;
   }
+
+  public async findIdByUser(username: string) :Promise<number> {
+    const id = await this.model.findByUser(username);
+    return id;
+  }
 }

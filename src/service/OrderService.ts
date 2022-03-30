@@ -23,4 +23,18 @@ export default class ProductService {
     const result = Promise.all(productsOrderArray);
     return result;
   }
+
+  public async create(userId: number, products: number[]) {
+    const newOrder = await this.orderModel.create(userId);
+    const productsPromises = products.map(async (productId: number) => {
+      const product = await this.productModel.getById(productId);
+      if (newOrder.id) {
+        await this.productModel
+          .createByOrder(product.name, product.amount, newOrder.id);
+        return productId;
+      }
+    }); 
+    const result = await Promise.all(productsPromises);
+    return { order: { userId, products: result } };
+  }
 }
