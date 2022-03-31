@@ -1,5 +1,5 @@
 
-# Blogs Apo
+# Trybesmith
 
 O projeto, feito durante curso da trybe, foi meu primeiro contato com o TypeScript 
 e uma com uma linguagem fortemente tipada, e trata-se de uma API para um ferreiro.
